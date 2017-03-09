@@ -43,7 +43,7 @@ void loop()
   *portB |= 0x40;
   
   *thisTCCR1B &= 0xF8;              //Disable Timer
-  *thisTCNT1 = (unsigned int) (65536 - (long) (15.625 * 2.27273)); //The timer will count up from the value to the max 65536
+  *thisTCNT1 = (unsigned int) (65536 - (long) (15.625 * 20)); //The timer will count up from the value to the max 65536
   *thisTCCR1B |= 0b00000101;        //Set pre-scalar 1024 and start Timer, I'm not sure if the function should choose what pre-scalar to use
                                     //...or if it's safest to just stick to one
   
@@ -55,7 +55,7 @@ void loop()
   *portB &= 0xBF;
 
   *thisTCCR1B &= 0xF8;              //Disable Timer
-  *thisTCNT1 = (unsigned int) (65536 - (long) (15.625 * 2.27273)); //The timer will count up from the value to the max 65536
+  *thisTCNT1 = (unsigned int) (65536 - (long) (15.625 * 20)); //The timer will count up from the value to the max 65536
   *thisTCCR1B |= 0b00000101;        //Set pre-scalar 1024 and start Timer, I'm not sure if the function should choose what pre-scalar to use
                                     //...or if it's safest to just stick to one
   
