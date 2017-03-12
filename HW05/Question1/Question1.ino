@@ -1,6 +1,6 @@
 /*
  * Bryce Monaco
- * CS 365 (Lab Section 1102)
+ * CPE 301 (Lab Section 1102)
  * HW05 - Question 1
  * 
  * Note: Contains some modified variable declarations from BlinkyT2.txt from WebCampus
