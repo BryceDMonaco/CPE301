@@ -28,29 +28,6 @@ unsigned char values[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x27, 0x7F, 
 
 void loop() 
 {
- 
-  /*
-  //Input testing on PB0
-  if ((*pinB & 0x01) == 1)
-  {
-    *portB |= 0x80;
-    
-  } else
-  {
-    *portB &= 0x7F;
-    
-  }
-*/
-/*
-  for (int i = 0; i < 16; i++)
-  {
-    *portK = values[i];
-
-    delay(500);
-    
-  }
-*/ 
-
   *portK = values[(*pinB & 0x0F)];  //Take the input from the switches, mask out bits 4-7, and use it as an array index (see values[] comment)
                                     //...and output it to Port K 
   
