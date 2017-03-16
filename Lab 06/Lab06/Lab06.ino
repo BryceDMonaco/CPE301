@@ -51,7 +51,7 @@ void loop()
   }
 */ 
 
- // *portK = values[(*pinB & 0x0F)];  //Take the input from the switches, mask out bits 4-7, and use it as an array index (see values[] comment)
-                                      //...and output it to Port K 
+  *portK = values[(*pinB & 0x0F)];  //Take the input from the switches, mask out bits 4-7, and use it as an array index (see values[] comment)
+                                    //...and output it to Port K 
   
 }
