@@ -14,7 +14,7 @@
 */
 
 //Port B Pointers
-volatile unsigned char* thisDDRB = (unsigned char) 0x24;
+volatile unsigned char* thisDDRB = (volatile unsigned char) 0x24;
 volatile unsigned char* thisPortB = (unsigned char) 0x25;
 
 void MyDelay (unsigned long mSeconds);
