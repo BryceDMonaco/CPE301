@@ -47,7 +47,7 @@ void loop()
 
 void U0init (int rate) 
 { 
-  unsigned int newBaud = (FCPU / 16 / rate - 1);
+  unsigned int newBaud = (FCPU / 16 / rate - 1); //((FCPU)/16*rate) - 1 (Old function) 
 
   *thisUCSR0A = 0x20;
   *thisUCSR0B = 0x18;
