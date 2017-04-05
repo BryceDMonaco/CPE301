@@ -84,7 +84,7 @@ unsigned char U0getchar ()
 //U0putchar(unsigned char U0pdata) – will wait until the serial port TBE status bit is high and then will take the character U0pdata and send the character out to the serial port.
 void U0putchar (unsigned char U0pdata)
 {
-  while ((*thisUCSR0A >> 6) != 0x00); //wait until the bit 6 goes high
+  //while ((*thisUCSR0A >> 6) != 0x00); //wait until the bit 6 goes high
 
   *thisUDR0 = U0pdata;
 
