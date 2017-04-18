@@ -3,17 +3,11 @@
 
     Original Author: Seb Madgwick
     Modified By: Bryce Monaco
-
-    Sends up to all 6 analogue inputs values in ASCII as comma separated values
-    over serial.  Each line is terminated with a carriage return character ('\r').
-    The number of channels is sent by sending a character value of '1' to '6' to 
-    the Arduino.
+    Version 2.0 //2.0 since I consider 1.0 to be the original program
 
     Original File: https://github.com/xioTechnologies/Serial-Oscilloscope/blob/master/ArduinoPrintADC/ArduinoPrintADC.ino
 
  */
-
-#include <stdlib.h> // div, div_t
 
 //Serial Pointers
 volatile unsigned char *myUCSR0A = (unsigned char *) 0xC0;
@@ -33,53 +27,42 @@ void U0init (int rate);
 unsigned char U0kbhit ();
 unsigned char U0getchar ();
 void U0putchar (unsigned char U0pdata);
-void InitializeADC (int doStart);
+void InitializeADC ();
 
 void setup() 
 {
   // initialize the serial port on USART0:
   U0init(9600);
-  //Serial.begin(9600);
-
-  //InitializeADC (1);
   
 }
 
 void loop() 
 {
-    InitializeADC (1);
+    InitializeADC ();
     PrintInt(MyAnalogRead());
-    //PrintInt(analogRead(A0));
-
     
-    //Serial.write('\r'); // print new line
     U0putchar('\r');
     
 }
 
-// Fast int to ASCII conversion
+// Fast int to ASCII conversion, used for serial output
 void PrintInt(int i) 
 {
     static const char asciiDigits[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-    //div_t n;
     int n;
     int print = 0;
     
     if(i < 0) 
     {
-        //Serial.write('-');
         U0putchar('-');
         i = -i;
         
     }
-    
+
     if(i >= 10000) 
     {
-        //n = div(i, 10000);
         n = i/10000;
-        //Serial.write(asciiDigits[n.quot]);
         U0putchar(asciiDigits[n]);
-        //i = n.rem;
         i = i % 10000;
         print = 1;
         
@@ -87,11 +70,8 @@ void PrintInt(int i)
     
     if(i >= 1000 || print) 
     {
-        //n = div(i, 1000);
         n = i / 1000;
-        //Serial.write(asciiDigits[n.quot]);
         U0putchar(asciiDigits[n]);
-        //i = n.rem;
         i = i % 1000;
         print = 1;
         
@@ -99,11 +79,8 @@ void PrintInt(int i)
     
     if(i >= 100 || print) 
     {
-        //n = div(i, 100);
         n = i / 100;
-        //Serial.write(asciiDigits[n.quot]);
         U0putchar(asciiDigits[n]);
-        //i = n.rem;
         i = i % 100;
         print = 1;
         
@@ -111,17 +88,16 @@ void PrintInt(int i)
     
     if(i >= 10 || print) 
     {
-        //n = div(i, 10);
         n = i / 10;
-        //Serial.write(asciiDigits[n.quot]);
         U0putchar(asciiDigits[n]);
-        //i = n.rem;
         i = i % 10;
         
     }
     
-    //Serial.write(asciiDigits[i]);
     U0putchar(asciiDigits[i]);
+
+    return;
+    
 }
 
 //
@@ -154,18 +130,15 @@ void U0putchar(unsigned char U0pdata)
   
 }
 
-void InitializeADC (int doStart)
+//Has the ADC record a value
+void InitializeADC ()
 {
   *myADCSRA = (unsigned char) 0x84;
   *myADCSRB = (unsigned char) 0x00;
   *myADMUX = (unsigned char) 0x40;
   *myDIDR0 = (unsigned char) 0x00;
 
-  if (doStart == 1)
-  {
-    *myADCSRA |= 0x40; //Start conversion
-    
-  }
+  *myADCSRA |= 0x40; //Start conversion
 
   while ((*myADCSRA & 0x40) == 0x40); //Wait for conversion to finish
   
