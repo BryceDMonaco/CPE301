@@ -39,8 +39,6 @@ void U0putchar (unsigned char U0pdata);
 
 void setup() 
 {
-  // initialize digital pin LED_BUILTIN as an output.
-  //*portDDRB |= 0x80; //LED is conected to PB7, used for debugging
   *portDDRB |= 0x40; //Speaker connected to PB6, pin 12
 
   //Set the timer to Normal mode
@@ -53,24 +51,11 @@ void setup()
 
   //Serial.begin(9600);
   U0init(9600);
-
-  //*thisTCNT1 = (unsigned int) 65536 - 1;
     
 }
 
 void loop() 
 {
-  /*
-  if (Serial.available()) {
-    //read the most recent byte
-    byteRead = Serial.read();
-    //ECHO the value that was read, back to the serial port.
-    
-    Serial.write(byteRead);
-    
-  }
-  */
-
   if (U0kbhit() == 0x01)
   {
     byteRead = U0getchar();
@@ -92,109 +77,169 @@ void loop()
   {
     shouldPlay = true;
     value = 18182;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;  
     
   } else if (byteRead == 'b') //B
   {
      shouldPlay = true;
-    value = 16194;
+    value = 16194; 
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'c') //C
   {
     shouldPlay = true;
     value = 15296;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'd') //D
   {
     shouldPlay = true;
     value = 13628;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'e') //E
   {
     shouldPlay = true;
     value = 12139;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'f') //F
   {
     shouldPlay = true;
     value = 11461;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'g') //G
   {
     shouldPlay = true;
     value = 10204;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'A') //A#
   {
     shouldPlay = true;
     value = 17167;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'C') //C#
   {
     shouldPlay = true;
     value = 14440;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'D') //D#
   {
     shouldPlay = true;
     value = 12820;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'F') //F#
   {
     shouldPlay = true;
     value = 10811;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'G') //G#
   {
     shouldPlay = true;
     value = 9627;
+
+    *thisTCCR1B &= 0xF8;              //Disable Timer
+    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+
+    byteRead = 't'; //Note 't' is just a value which the program doesn't recognize as a note
+
+    *thisTCCR1B |= 0b00000001;
     
   } else if (byteRead == 'q')
   {
     shouldPlay == false;
 
-    *portB &= 0xBF;
+    *portB &= 0xBF; //Set the output low
+    *thisTCCR1B &= 0xF8; //Disable the timer to stop any possible interrupts
+
+    //This if statement does not set byteRead to 't' because on the off chance that an interrupt fires and starts the timer again
+    //while this function is running then the next time the loop() function goes it will be immediately stopped
     
   }
   
-  if (!hasStarted && shouldPlay)
-  {
-    hasStarted = true;
-    
-    *portB |= 0x40; //Set output high
-    
-    //*thisTCCR1B &= 0xF8;              //Disable Timer
-    //*thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
-    *thisTCCR1B |= 0b00000001;        
-/*    
-    while ((*thisTIFR1 & 0x01) == 0);    //Wait for overflow flag 
-    
-    *thisTCCR1B &= 0xF8;              //Disable Timer                         
-    *thisTIFR1 |= 0x01;               //Reset the flag
-
-    *portB &= 0xBF; //Set output low
-    
-    *thisTCCR1B &= 0xF8;              //Disable Timer
-    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
-    *thisTCCR1B |= 0b00000001;        //Set pre-scalar 1024 and start Timer, I'm not sure if the function should choose what pre-scalar to use
-                                      //...or if it's safest to just stick to one
-    
-    while ((*thisTIFR1 & 0x01) == 0);    //Wait for overflow flag 
-    
-    *thisTCCR1B &= 0xF8;              //Disable Timer                         
-    *thisTIFR1 |= 0x01;               //Reset the flag
-*/
-  }  
 }
 
 ISR(TIMER1_OVF_vect)
 {  
-  if ((*portB & 0x40) == 0x40) //LED is on
+  if ((*portB & 0x40) == 0x40) //Output is on
   {
-    *portB &= 0xBF; //Disable the LED
+    *portB &= 0xBF; //Disable the output
     
   } else
   {
-    *portB |= 0x40; //Enable the LED
+    *portB |= 0x40; //Enable the output
      
   }
 
@@ -202,7 +247,7 @@ ISR(TIMER1_OVF_vect)
     
   *thisTCCR1B &= 0xF8;              //Disable Timer
   *thisTCNT1 = (unsigned int) (65536 - value); //The timer will count up from the value to the max 65536
-  //*thisTCCR1B |= 0b00000001; //Run the timer at PS1
+  *thisTCCR1B |= 0b00000001; //Run the timer at PS1
   
 }
 
