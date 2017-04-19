@@ -20,12 +20,22 @@ volatile unsigned char *portB =    (unsigned char *) 0x25;
 //Status Register
 volatile unsigned char *thisSREG = (unsigned char *) 0x5F;
 
+//Serial Pointers
+volatile unsigned char *myUCSR0A = (unsigned char *) 0xC0;
+volatile unsigned char *myUCSR0B = (unsigned char *) 0xC1;
+volatile unsigned char *myUCSR0C = (unsigned char *) 0xC2;
+volatile unsigned int  *myUBRR0  = (unsigned int *)  0xC4;
+volatile unsigned char *myUDR0   = (unsigned char *) 0xC6;
+
 unsigned char byteRead;
 bool shouldPlay = false; //Gets marked as false when q is input, stays true after first note until q
 bool hasStarted = false;
 int value;
 
-void MyDelay (unsigned long mSeconds);
+void U0init (int rate);
+unsigned char U0kbhit ();
+unsigned char U0getchar ();
+void U0putchar (unsigned char U0pdata);
 
 void setup() 
 {
@@ -41,18 +51,31 @@ void setup()
 
   *thisSREG |= 0x80; //Enable global interrupts
 
-  Serial.begin(9600);
+  //Serial.begin(9600);
+  U0init(9600);
+
+  //*thisTCNT1 = (unsigned int) 65536 - 1;
     
 }
 
 void loop() 
 {
+  /*
   if (Serial.available()) {
-    /* read the most recent byte */
+    //read the most recent byte
     byteRead = Serial.read();
-    /*ECHO the value that was read, back to the serial port. */
+    //ECHO the value that was read, back to the serial port.
     
     Serial.write(byteRead);
+    
+  }
+  */
+
+  if (U0kbhit() == 0x01)
+  {
+    byteRead = U0getchar();
+
+    U0putchar(byteRead);
     
   }
 
@@ -60,7 +83,7 @@ void loop()
   {
     shouldPlay = false; 
 
-    Serial.write("Stopping!\n");
+    //Serial.write("Stopping!\n");
     
   }
 
@@ -128,20 +151,20 @@ void loop()
   } else if (byteRead == 'q')
   {
     shouldPlay == false;
+
+    *portB &= 0xBF;
     
   }
   
-  if (shouldPlay && !hasStarted)
+  if (!hasStarted && shouldPlay)
   {
     hasStarted = true;
     
     *portB |= 0x40; //Set output high
     
-    *thisTCCR1B &= 0xF8;              //Disable Timer
-    *thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
-    *thisTCCR1B |= 0b00000001;        //Set pre-scalar 1024 and start Timer, I'm not sure if the function should choose what pre-scalar to use
-                                      //...or if it's safest to just stick to one
-
+    //*thisTCCR1B &= 0xF8;              //Disable Timer
+    //*thisTCNT1 = (unsigned int) 65536 - value; //The timer will count up from the value to the max 65536
+    *thisTCCR1B |= 0b00000001;        
 /*    
     while ((*thisTIFR1 & 0x01) == 0);    //Wait for overflow flag 
     
@@ -167,7 +190,7 @@ ISR(TIMER1_OVF_vect)
 {  
   if ((*portB & 0x40) == 0x40) //LED is on
   {
-    *portB &= 0x0F; //Disable the LED
+    *portB &= 0xBF; //Disable the LED
     
   } else
   {
@@ -176,10 +199,43 @@ ISR(TIMER1_OVF_vect)
   }
 
   hasStarted = false;
-  
-/*  
+    
   *thisTCCR1B &= 0xF8;              //Disable Timer
-  *thisTCNT1 = (unsigned int) (65536 - 160); //The timer will count up from the value to the max 65536
-  *thisTCCR1B |= 0b00000001; //Run the timer at PS1
-*/  
+  *thisTCNT1 = (unsigned int) (65536 - value); //The timer will count up from the value to the max 65536
+  //*thisTCCR1B |= 0b00000001; //Run the timer at PS1
+  
+}
+
+void U0init(int U0baud)
+{
+  unsigned long FCPU = 16000000;
+  unsigned int tbaud;
+  tbaud = (FCPU / 16 / U0baud - 1);
+  *myUCSR0A = 0x20;
+  *myUCSR0B = 0x18;
+  *myUCSR0C = 0x06;
+  *myUBRR0  = tbaud;
+ 
+}
+
+unsigned char U0kbhit()
+{
+  return (*myUCSR0A >> 7); //Shifted to the 0th bit
+
+}
+
+unsigned char U0getchar()
+{
+  return *myUDR0;
+  
+}
+
+void U0putchar(unsigned char U0pdata)
+{  
+  while ((*myUCSR0A & 0x20) != 0x20); //Wait for data register to be empty
+  
+  *myUDR0 = U0pdata;
+
+  return;
+  
 }
